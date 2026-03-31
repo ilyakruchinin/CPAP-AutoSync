@@ -65,26 +65,10 @@ WIFI_PASSWORD = YourWiFiPassword
 ENDPOINT_TYPE = CLOUD
 CLOUD_CLIENT_ID = sdbfriends
 CLOUD_CLIENT_SECRET = your-sdbfriends-api-key
+CLOUD_BASE_URL = https://app.sdbfriends.ca
 ```
 
 **That's it!** Replace with your actual WiFi and API credentials. This simpler model is specifically tested with **SDBFriends** but is technically compatible with any cloud provider following a similar API-key-based design.
-</details>
-
-<details>
-<summary><b>🔄 For Multiple Destinations (Dual Upload)</b></summary>
-
-```ini
-# WiFi
-WIFI_SSID = YourWiFiName
-WIFI_PASSWORD = YourWiFiPassword
-
-# SleepHQ
-ENDPOINT_TYPE = CLOUD
-CLOUD_CLIENT_ID = your-sleephq-client-id
-CLOUD_CLIENT_SECRET = your-sleephq-client-secret
-```
-
-**That's it!** Replace with your actual WiFi and SleepHQ credentials.
 </details>
 
 <details>
@@ -102,24 +86,11 @@ ENDPOINT_USER = username
 ENDPOINT_PASSWORD = password
 CLOUD_CLIENT_ID = sdbfriends
 CLOUD_CLIENT_SECRET = your-sdbfriends-api-key
+CLOUD_BASE_URL = https://app.sdbfriends.ca
 ```
 
 **That's it!** Provide credentials for each destination to upload to multiple targets simultaneously.
 </details>
-
-```ini
-# WiFi
-WIFI_SSID = YourWiFiName
-WIFI_PASSWORD = YourWiFiPassword
-
-# Dual Upload
-ENDPOINT_TYPE = SMB,CLOUD
-ENDPOINT = //192.168.1.100/cpap_backups
-ENDPOINT_USER = username
-ENDPOINT_PASSWORD = password
-CLOUD_CLIENT_ID = your-sleephq-client-id
-CLOUD_CLIENT_SECRET = your-sleephq-client-secret
-```
 
 **That's it!** Provide both SMB and SleepHQ credentials to upload to both destinations.
 </details>
@@ -259,6 +230,7 @@ WIFI_PASSWORD = YourNetworkPassword
 ENDPOINT_TYPE = CLOUD
 CLOUD_CLIENT_ID = sdbfriends
 CLOUD_CLIENT_SECRET = your-sdbfriends-api-key
+CLOUD_BASE_URL = https://app.sdbfriends.ca
 
 GMT_OFFSET_HOURS = 0
 ```
@@ -328,6 +300,12 @@ Insert the SD card into your CPAP machine's SD slot and power it on. The device 
 - For **SleepHQ**: Use your SleepHQ Client Secret (NOT your password).
 - For **SDBFriends**: Use your SDBFriends API Key.
 - Example: `CLOUD_CLIENT_SECRET = your-api-key`
+
+**CLOUD_BASE_URL** (optional, default: "https://sleephq.com")
+- The base URL of the cloud provider.
+- For **SleepHQ**: Leave as default or omit.
+- For **SDBFriends**: Set to `https://app.sdbfriends.ca`.
+- Example: `CLOUD_BASE_URL = https://app.sdbfriends.ca`
 
 > ⚠️ **How to get your SleepHQ API Keys**
 > 1. A **SleepHQ Pro** (paid) subscription is required to use the API.

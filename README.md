@@ -139,6 +139,7 @@ WIFI_PASSWORD = YourWiFiPassword
 ENDPOINT_TYPE = CLOUD
 CLOUD_CLIENT_ID = sdbfriends
 CLOUD_CLIENT_SECRET = your-sdbfriends-api-key
+CLOUD_BASE_URL = https://app.sdbfriends.ca
 ```
 </details>
 
