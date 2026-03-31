@@ -168,7 +168,7 @@ void WiFiManager::onWiFiEvent(WiFiEvent_t event, WiFiEventInfo_t info) {
     }
 }
 
-bool WiFiManager::connectStation(const String& ssid, const String& password) {
+bool WiFiManager::connectStation(const String& ssid, const String& password, const String& hostname) {
     // Validate SSID before attempting connection
     if (ssid.isEmpty()) {
         LOG_ERROR("Cannot connect to WiFi: SSID is empty");
@@ -182,6 +182,8 @@ bool WiFiManager::connectStation(const String& ssid, const String& password) {
         Logger::getInstance().dumpSavedLogs("wifi_config_error");
         return false;
     }
+
+    WiFi.setHostname(hostname.c_str());
     
     if (password.isEmpty()) {
         LOG_WARN("WiFi password is empty - attempting open network connection");
@@ -336,9 +338,6 @@ bool WiFiManager::startMDNS(const String& hostname) {
     }
 
     String name = hostname;
-    if (name.isEmpty()) {
-        name = "cpap"; // Default hostname
-    }
 
     LOGF("Starting mDNS responder with hostname: %s.local", name.c_str());
 

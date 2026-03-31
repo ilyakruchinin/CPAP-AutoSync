@@ -9,17 +9,18 @@ const char* Config::PREFS_KEY_CLOUD_SECRET = "cloud_secret";
 const char* Config::CENSORED_VALUE = "***STORED_IN_FLASH***";
 
 Config::Config() : 
-    gmtOffsetHours(0),  // Default: UTC
-    saveLogs(false),  // Default: do not persist logs (debugging only)
-    debugMode(false),    // Default: suppress verbose pre-flight and heap stats
+    hostname("cpap"),		// Default: cpap
+    gmtOffsetHours(0),		// Default: UTC
+    saveLogs(false),		// Default: do not persist logs (debugging only)
+    debugMode(false),		// Default: suppress verbose pre-flight and heap stats
     isValid(false),
     
     // Cloud upload defaults
     cloudBaseUrl("https://sleephq.com"),
     cloudDeviceId(0),
-    maxDays(365),  // Default: upload only last 365 days
-    recentFolderDays(2),  // Default: re-check today + yesterday
-    cloudInsecureTls(false),  // Default: use root CA validation
+    maxDays(365),		// Default: upload only last 365 days
+    recentFolderDays(2),	// Default: re-check today + yesterday
+    cloudInsecureTls(false),	// Default: use root CA validation
     
     // Upload FSM defaults
     uploadMode("smart"),
@@ -28,22 +29,22 @@ Config::Config() :
     inactivitySeconds(62),
     exclusiveAccessMinutes(5),
     cooldownMinutes(10),
-    enable1BitSdMode(false),  // Default to safer 4-bit mode
+    enable1BitSdMode(false),	// Default to safer 4-bit mode
     minimizeReboots(true),
-    flushLogsDuringUpload(false),  // Default: defer log flushes during uploads
+    flushLogsDuringUpload(false), // Default: defer log flushes during uploads
     
     _hasSmbEndpoint(false),
     _hasCloudEndpoint(false),
     _hasWebdavEndpoint(false),
     
-    maskCredentials(false),  // Default: plaintext — credentials stay in config.txt
-    credentialsInFlash(false),  // Will be set during loadFromSD
+    maskCredentials(false),	// Default: plaintext — credentials stay in config.txt
+    credentialsInFlash(false),	// Will be set during loadFromSD
     
     // Power management defaults (optimized for AirSense 11 compatibility)
-    cpuSpeedMhz(80),  // Default: 80MHz (minimum for WiFi, saves ~30-40mA)
-    wifiTxPower(WifiTxPower::POWER_MID),  // Default: 5.0dBm (typical bedroom placement, reduces peak current)
-    wifiPowerSaving(WifiPowerSaving::SAVE_MID),  // Default: MIN_MODEM (preserves mDNS)
-    brownoutDetectMode(BrownoutDetectMode::ENABLED)  // Default: brownout detection enabled
+    cpuSpeedMhz(80),					// Default: 80MHz (minimum for WiFi, saves ~30-40mA)
+    wifiTxPower(WifiTxPower::POWER_MID),		// Default: 5.0dBm (typical bedroom placement, reduces peak current)
+    wifiPowerSaving(WifiPowerSaving::SAVE_MID),		// Default: MIN_MODEM (preserves mDNS)
+    brownoutDetectMode(BrownoutDetectMode::ENABLED)	// Default: brownout detection enabled
 {}
 
 Config::~Config() {
@@ -180,7 +181,7 @@ void Config::setConfigValue(String key, String value) {
     } else if (key == "WIFI_PASSWORD") {
         wifiPassword = value;
     } else if (key == "HOSTNAME") {
-        hostname = value;
+        hostname = value.substring(0, 32);  //limit to 32
     } else if (key == "SCHEDULE") {
         schedule = value;
     } else if (key == "ENDPOINT") {
