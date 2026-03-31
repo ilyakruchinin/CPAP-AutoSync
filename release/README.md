@@ -54,7 +54,24 @@ ENDPOINT_PASSWORD = password
 </details>
 
 <details>
-<summary><b>☁️ For SleepHQ Cloud</b></summary>
+<summary><b>☁️ For Generic Cloud (API Key — e.g. SDBFriends)</b></summary>
+
+```ini
+# WiFi
+WIFI_SSID = YourWiFiName
+WIFI_PASSWORD = YourWiFiPassword
+
+# Generic Cloud
+ENDPOINT_TYPE = CLOUD
+CLOUD_CLIENT_ID = sdbfriends
+CLOUD_CLIENT_SECRET = your-sdbfriends-api-key
+```
+
+**That's it!** Replace with your actual WiFi and API credentials. This simpler model is specifically tested with **SDBFriends** but is technically compatible with any cloud provider following a similar API-key-based design.
+</details>
+
+<details>
+<summary><b>🔄 For Multiple Destinations (Dual Upload)</b></summary>
 
 ```ini
 # WiFi
@@ -71,7 +88,24 @@ CLOUD_CLIENT_SECRET = your-sleephq-client-secret
 </details>
 
 <details>
-<summary><b>🔄 For Both SMB + SleepHQ (Dual Upload)</b></summary>
+<summary><b>🔄 For Multiple Destinations (Dual Upload)</b></summary>
+
+```ini
+# WiFi
+WIFI_SSID = YourWiFiName
+WIFI_PASSWORD = YourWiFiPassword
+
+# Dual Upload
+ENDPOINT_TYPE = SMB,CLOUD
+ENDPOINT = //192.168.1.100/cpap_backups
+ENDPOINT_USER = username
+ENDPOINT_PASSWORD = password
+CLOUD_CLIENT_ID = sdbfriends
+CLOUD_CLIENT_SECRET = your-sdbfriends-api-key
+```
+
+**That's it!** Provide credentials for each destination to upload to multiple targets simultaneously.
+</details>
 
 ```ini
 # WiFi
@@ -217,6 +251,18 @@ ENDPOINT_PASSWORD = password
 GMT_OFFSET_HOURS = 0
 ```
 
+**Option C: Generic Cloud Upload (API Key — e.g. SDBFriends)**
+```ini
+WIFI_SSID = YourNetworkName
+WIFI_PASSWORD = YourNetworkPassword
+
+ENDPOINT_TYPE = CLOUD
+CLOUD_CLIENT_ID = sdbfriends
+CLOUD_CLIENT_SECRET = your-sdbfriends-api-key
+
+GMT_OFFSET_HOURS = 0
+```
+
 **Syntax Notes:** 
 - Lines starting with `#` or `//` are comments.
 - Spaces around `=` are optional.
@@ -272,12 +318,16 @@ Insert the SD card into your CPAP machine's SD slot and power it on. The device 
   - `SMB,CLOUD` - Upload to both (simultaneously)
 
 **CLOUD_CLIENT_ID** (required for CLOUD)
-- Your SleepHQ Client ID (this is **NOT** your username)
-- Example: `CLOUD_CLIENT_ID = your-client-id`
+- Your Cloud Client ID or Provider ID.
+- For **SleepHQ**: Use your SleepHQ Client UID (NOT your username).
+- For **SDBFriends**: Use `sdbfriends` (all lowercase).
+- Example: `CLOUD_CLIENT_ID = sdbfriends`
 
 **CLOUD_CLIENT_SECRET** (required for CLOUD)
-- Your SleepHQ Client Secret (this is **NOT** your password)
-- Example: `CLOUD_CLIENT_SECRET = your-client-secret`
+- Your Cloud Client Secret or API Key.
+- For **SleepHQ**: Use your SleepHQ Client Secret (NOT your password).
+- For **SDBFriends**: Use your SDBFriends API Key.
+- Example: `CLOUD_CLIENT_SECRET = your-api-key`
 
 > ⚠️ **How to get your SleepHQ API Keys**
 > 1. A **SleepHQ Pro** (paid) subscription is required to use the API.

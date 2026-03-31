@@ -128,7 +128,22 @@ CLOUD_CLIENT_SECRET = your-sleephq-client-secret
 </details>
 
 <details>
-<summary><b>🔄 Both (SMB + SleepHQ simultaneously)</b></summary>
+<summary><b>☁️ Generic Cloud Upload (API Key — e.g. SDBFriends)</b></summary>
+
+*(Note: This model uses a simpler API-key-based authentication instead of OAuth. While specifically tested with **SDBFriends**, it is a portable design compatible with any cloud provider following a similar direct-auth pattern).*
+
+```ini
+WIFI_SSID = YourWiFiName
+WIFI_PASSWORD = YourWiFiPassword
+
+ENDPOINT_TYPE = CLOUD
+CLOUD_CLIENT_ID = sdbfriends
+CLOUD_CLIENT_SECRET = your-sdbfriends-api-key
+```
+</details>
+
+<details>
+<summary><b>🔄 Multiple (SMB + Cloud simultaneously)</b></summary>
 
 *(Note: A SleepHQ Pro subscription is required. The API keys below are generated from your SleepHQ Account Settings, they are **NOT** your username and password).*
 
