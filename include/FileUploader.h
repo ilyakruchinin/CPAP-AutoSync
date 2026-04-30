@@ -146,8 +146,18 @@ public:
     bool hasSmbBackend()   const { return smbStateManager   != nullptr; }
     bool hasBothBackends() const { return hasCloudBackend() && hasSmbBackend(); }
     bool hasIncompleteFolders() {
-        bool smbInc   = smbStateManager   && smbStateManager->getIncompleteFoldersCount() > 0;
-        bool cloudInc = cloudStateManager && cloudStateManager->getIncompleteFoldersCount() > 0;
+        // Use the work probe snapshot (universe vs synced) rather than
+        // getIncompleteFoldersCount(), which relies on totalFoldersCount
+        // being set during the upload phase's scanDatalogFolders() call.
+        // When a backend fails to connect (e.g. SMB socket error),
+        // scanDatalogFolders() never runs and totalFoldersCount stays 0,
+        // making getIncompleteFoldersCount() falsely return 0.
+        // The work probe always runs (pre- and post-upload) and has
+        // accurate universe/synced counts.
+        bool smbInc   = smbStateManager   && smbStateManager->hasBeenProbed()
+                        && smbStateManager->getProbeSynced() < smbStateManager->getProbeUniverse();
+        bool cloudInc = cloudStateManager && cloudStateManager->hasBeenProbed()
+                        && cloudStateManager->getProbeSynced() < cloudStateManager->getProbeUniverse();
         return smbInc || cloudInc;
     }
 
