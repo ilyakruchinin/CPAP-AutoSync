@@ -41,9 +41,12 @@ void TrafficMonitor::begin(int pin) {
         return;
     }
     
-    // Set glitch filter to ignore pulses < ~100ns (filter value in ns)
+    // Set glitch filter to reject EMI noise while passing valid SD edges.
+    // AS11 runs the SD clock at 20 MHz → 50 ns per bit.  The filter must be
+    // shorter than the minimum valid pulse to avoid rejecting real activity.
+    // 40 ns ≈ 3 APB cycles at 80 MHz — comfortably below the 50 ns bit period.
     pcnt_glitch_filter_config_t filter_config = {};
-    filter_config.max_glitch_ns = 125;    // ~10 APB cycles at 80 MHz ≈ 125 ns
+    filter_config.max_glitch_ns = 40;
     err = pcnt_unit_set_glitch_filter(_pcntUnit, &filter_config);
     if (err != ESP_OK) {
         LOG_WARNF("PCNT filter config failed: %d", err);
