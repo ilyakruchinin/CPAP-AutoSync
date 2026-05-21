@@ -162,6 +162,7 @@ bool ScheduleManager::syncTime() {
 // ============================================================================
 
 bool ScheduleManager::isInUploadWindow() {
+    if (isManualMode()) return false;
     if (!isTimeSynced()) return false;
     
     struct tm timeinfo;
@@ -205,6 +206,7 @@ bool ScheduleManager::isSmartQuietPeriod() {
 }
 
 bool ScheduleManager::canUploadFreshData() {
+    if (isManualMode()) return false;
     if (!isTimeSynced()) return false;
     
     if (isSmartMode()) {
@@ -216,6 +218,7 @@ bool ScheduleManager::canUploadFreshData() {
 }
 
 bool ScheduleManager::canUploadOldData() {
+    if (isManualMode()) return false;
     if (!isTimeSynced()) return false;
     
     // Both modes: old data only within upload window
@@ -223,6 +226,7 @@ bool ScheduleManager::canUploadOldData() {
 }
 
 bool ScheduleManager::isUploadEligible(bool hasFreshData, bool hasOldData) {
+    if (isManualMode()) return false;
     if (!isTimeSynced()) return false;
     
     // In scheduled mode, check if already completed today
@@ -282,6 +286,9 @@ void ScheduleManager::markUploadCompleted() {
 }
 
 unsigned long ScheduleManager::getSecondsUntilNextUpload() {
+    if (isManualMode()) {
+        return (unsigned long)-1;
+    }
     if (!isTimeSynced()) {
         return 0;
     }
@@ -366,3 +373,4 @@ int ScheduleManager::getUploadStartHour() const { return uploadStartHour; }
 int ScheduleManager::getSmartStartHour() const { return smartStartHour; }
 int ScheduleManager::getUploadEndHour() const { return uploadEndHour; }
 bool ScheduleManager::isSmartMode() const { return uploadMode == "smart"; }
+bool ScheduleManager::isManualMode() const { return uploadMode == "manual"; }

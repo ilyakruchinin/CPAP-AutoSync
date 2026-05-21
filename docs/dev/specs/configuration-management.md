@@ -50,7 +50,7 @@ ENDPOINT = //192.168.1.100/cpap_backups
 - `CLOUD_CLIENT_ID` / `CLOUD_CLIENT_SECRET` - SleepHQ credentials
 
 ### Upload Scheduling
-- `UPLOAD_MODE` - "smart" or "scheduled"
+- `UPLOAD_MODE` - "smart", "scheduled", or "manual"
 - `UPLOAD_START_HOUR` / `UPLOAD_END_HOUR` - Upload window (0-23)
 - `INACTIVITY_SECONDS` - Bus silence required before upload (default: 62)
 - `EXCLUSIVE_ACCESS_MINUTES` - Max SD card hold time (default: 5)

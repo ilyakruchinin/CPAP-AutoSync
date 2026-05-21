@@ -426,6 +426,11 @@
                     Scheduled Mode
                 </label>
                 <div class="radio-desc">Uploads only during a daily time window.</div>
+                <label class="radio-label">
+                    <input type="radio" name="upload-mode" value="manual" onchange="onModeChange()" id="radio-manual">
+                    Manual Mode
+                </label>
+                <div class="radio-desc">Uploads only when you click the "Force Upload" button. Does not automatically upload on a schedule or access the SD card for routine checks. Cooldown periods are honoured.</div>
             </div>
 
             <!-- Timeline slider (shared Smart + Scheduled) -->
@@ -1229,6 +1234,8 @@ function onModeChange() {
     }
     var smartRow = document.getElementById('smart-slider-row');
     if (smartRow) smartRow.style.display = (mode === 'smart') ? '' : 'none';
+    var schedSlider = document.getElementById('sched-slider');
+    if (schedSlider) schedSlider.style.display = (mode === 'manual') ? 'none' : '';
     updateTimeline();
 }
 

@@ -15,7 +15,7 @@ namespace EarlyPCNT {
         if (pcnt_new_unit(&ucfg, &s_unit) != ESP_OK) return;
 
         pcnt_glitch_filter_config_t fcfg = {};
-        fcfg.max_glitch_ns = 125;
+        fcfg.max_glitch_ns = 40;   // 3 APB cycles at 80 MHz; below 50 ns SD bit @ 20 MHz
         pcnt_unit_set_glitch_filter(s_unit, &fcfg);
 
         pcnt_chan_config_t ccfg = {};

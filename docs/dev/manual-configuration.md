@@ -102,6 +102,7 @@ If you prefer to keep your passwords as plaintext in `config.txt` (e.g., for eas
 **UPLOAD_MODE** (optional, default: "smart")
 - `scheduled`: uploads in the configured time window
 - `smart` (recommended): starts shortly after therapy ends (activity + inactivity detection)
+- `manual`: never uploads automatically; triggers on-demand via the dashboard ("Force Upload")
 
 **UPLOAD_START_HOUR** (optional, default: 9)
 - Start of upload window (0-23, local time)

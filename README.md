@@ -18,7 +18,7 @@ Built with **extreme ease of use** in mind:
 ### **Power Compatibility & Known Hardware Limits**
 
 > [!CAUTION]
-> ⚠️ **AirSense 11** ***(🔍 ONLY REF 39517, check back sticker! 🏷️)*** ➔ Most **REF 39517** units have severe power limitations on their SD card slot. If the ESP32 card does not receive enough power, it will continually reset. You may experience frequent WiFi disconnects, failed uploads, or an "**SD Card Error**" on your CPAP machine's screen. See below for available solutions.
+> ⚠️ **AirSense 11** ***(🔍 ONLY REF 39517 and 39482, check back sticker! 🏷️)*** ➔ Most **REF 39517 (and possibly 39482)** units have severe power limitations on their SD card slot. If the ESP32 card does not receive enough power, it will continually reset. You may experience frequent WiFi disconnects, failed uploads, or an "**SD Card Error**" on your CPAP machine's screen. See below for available solutions.
 
 We are currently gathering statistics on which models work reliably. **If your model is not listed below, please report your experience to help us improve this data.**
 
@@ -65,6 +65,7 @@ If your REF 39517 AirSense 11 has power issues, the following community-develope
 | :--- | :--- | :--- | :--- | :--- | :---: | :--- |
 | **AirSense 11** | Singapore | `R390-451/1` | 39463 | *(not specified / Europe)* | ✅ **100%** | Fully working |
 | **AirSense 11** | Singapore | `R390-420/1` | 39480 | *(not specified / Europe)* | ✅ **100%** | Fully working |
+| **AirSense 11** | Singapore | `-------` | 39482 | *(not specified)* | ❌ **0%** | Stability issues reported, but only one unit tested |
 | **AirSense 11** | Singapore | `R390-451/1` | 39483 | *(not specified / Europe)* | ✅ **100%** | Fully working |
 | **AirSense 11** | Singapore | `R390-447/1` | 39517 | AIR11M1G22 | ❌ **35%** | Has known power delivery issues. Fails on most units. |
 | ↳ *(modded)* | — | — | ↳ 39517 🔧 | — | ⚠️ **65%** | *With SD Extender Mod and `BROWNOUT_DETECT=OFF`* |
@@ -154,9 +155,9 @@ SD card errors typically happen for two reasons:
 1. **Power Limits:** The CPAP machine cannot provide enough peak current to the SD slot during WiFi uploads. (Ensure you are running the latest firmware, which includes aggressive power-saving features).
 2. **Bad Timing (Collisions):** In **Smart** mode, uploads begin shortly after therapy ends (within your configured time slot only). If you briefly pause therapy and then resume it while an upload is actively running, the CPAP and the WiFi SD card will clash over SD access. With a properly configured **Smart** mode time period, this should not happen.
 
-If bad timing is causing your errors, you can avoid it entirely by switching to **Scheduled** mode.
+If bad timing is causing your errors, you can avoid it entirely by switching to **Scheduled** or **Manual** mode.
 
-See the [Full Setup Guide](docs/user/getting-started.md#️-sd-card-errors--use-scheduled-mode) for details.
+See the [Full Setup Guide](docs/user/getting-started.md#️-sd-card-errors--use-scheduled-or-manual-mode) for details.
 
 ---
 
@@ -166,6 +167,7 @@ See the [Full Setup Guide](docs/user/getting-started.md#️-sd-card-errors--use-
 |---------|--------------------|--------------------|
 | Upload mode: Smart | ❌ Automatically falls back | ✅ Supported |
 | Upload mode: Scheduled | ✅ Supported | ✅ Supported |
+| Upload mode: Manual | ✅ Supported | ✅ Supported |
 | Stealth SD Card Access | ✅ Unified Capture/Restore | ✅ Unified Capture/Restore |
 | SD bus mode | 1-bit (no DAT3) | 4-bit (DAT3 active) |
 
@@ -175,7 +177,7 @@ See the [Full Setup Guide](docs/user/getting-started.md#️-sd-card-errors--use-
 
 ## What You Get
 
-- **Automatic uploads after every therapy session** — smart mode detects when your CPAP finishes and starts uploading within minutes
+- **Flexible Upload Modes** — choose from **Smart** mode (automatic uploads shortly after therapy ends), **Scheduled** mode (only uploads within your set window), or **Manual** mode (never uploads automatically; triggers on-demand via the dashboard).
 - **Uploads to Windows shares, NAS, or SleepHQ** — or both at the same time
 - **Zero-Touch Configuration Validation** — the visual setup wizard prevents you from saving configurations that could crash your CPAP's SD access
 - **Automatic Device Discovery** — accesses the setup page natively, and automatically falls back to IP-based connection if your router or VPN blocks mDNS

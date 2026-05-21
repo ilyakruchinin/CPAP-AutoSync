@@ -813,6 +813,7 @@ void Config::overrideUploadMode(const String& mode) {
 bool Config::getFlushLogsDuringUpload() const { return flushLogsDuringUpload; }
 int Config::getSmartStartHour() const { return smartStartHour; }
 bool Config::isSmartMode() const { return uploadMode.equalsIgnoreCase("smart") && !smartConfigInvalid; }
+bool Config::isManualMode() const { return uploadMode.equalsIgnoreCase("manual"); }
 bool Config::isSmartConfigInvalid() const { return smartConfigInvalid; }
 
 void Config::validateAndNormalize() {
@@ -849,7 +850,7 @@ void Config::validateAndNormalize() {
     if (recentFolderDays < 0) { recentFolderDays = 2; }
     
     uploadMode.toLowerCase();
-    if (uploadMode != "scheduled" && uploadMode != "smart") { uploadMode = "smart"; }
+    if (uploadMode != "scheduled" && uploadMode != "smart" && uploadMode != "manual") { uploadMode = "smart"; }
     
     if (uploadStartHour < 0 || uploadStartHour > 23) { uploadStartHour = 9; }
     if (uploadEndHour < 0 || uploadEndHour > 23) { uploadEndHour = 21; }
