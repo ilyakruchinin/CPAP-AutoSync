@@ -1,5 +1,7 @@
 # ESP32 CPAP AutoSync
 
+![Warning](docs/screenshots/warning.png)
+
 Automatically upload CPAP therapy data from your SD card to a network share or SleepHQ — **within minutes of taking your mask off.**
 
 Built with **extreme ease of use** in mind:
