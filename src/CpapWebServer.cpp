@@ -501,7 +501,7 @@ void CpapWebServer::handleTriggerUpload() {
     // explicitly pressed Force Upload and has been warned via the Danger
     // Zone copy, so honour the request with FRESH_ONLY semantics and the
     // usual EXCLUSIVE_ACCESS_MINUTES time budget.
-    if (scheduleManager && !scheduleManager->canUploadFreshData()) {
+    if (scheduleManager && !scheduleManager->isManualMode() && !scheduleManager->canUploadFreshData()) {
         const char* why = scheduleManager->isSmartMode()
             ? "Smart mode quiet period"
             : "Scheduled mode outside window";

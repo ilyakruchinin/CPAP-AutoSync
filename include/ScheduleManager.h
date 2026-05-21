@@ -67,6 +67,7 @@ public:
     int getUploadEndHour() const;
     int getSmartStartHour() const;
     bool isSmartMode() const;
+    bool isManualMode() const;
 };
 
 #endif // SCHEDULE_MANAGER_H

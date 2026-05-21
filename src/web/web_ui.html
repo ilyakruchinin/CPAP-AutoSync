@@ -512,7 +512,11 @@ function renderStatus(d){
   if(mode==='SMART'&&ssh!=null&&!winAll){
     winDisplay=ssh+':00 / '+ws;
   }
-  set('d-win',winAll?'24/7 (always open)':winDisplay);
+  if(mode==='MANUAL'){
+    set('d-win','—');
+  }else{
+    set('d-win',winAll?'24/7 (always open)':winDisplay);
+  }
   set('d-inact',cfg.inactivity_seconds!=null?cfg.inactivity_seconds+'s':'—');
   set('d-excl',cfg.exclusive_access_minutes!=null?cfg.exclusive_access_minutes+' min':'—');
   set('d-cool',cfg.cooldown_minutes!=null?cfg.cooldown_minutes+' min':'—');
@@ -568,6 +572,11 @@ function renderStatus(d){
         +fBtn+' \u2192 forces an upload of recent data now.<br>'
         +'<span style="color:#aaa">Full upload resumes during the window ('+ws+').</span>';
     }
+  }else if(mode==='MANUAL'){
+    var fBtnManual='<span style="color:#ffaa44">Force Upload</span>';
+    help=mBadge+'\u25b6 Manual mode'+mEnd+'<br>'
+      +'No automatic uploads will occur. The SD card is not accessed for routine checks.<br>'
+      +fBtnManual+' \u2192 triggers a full upload of all available data now.';
   }
   var helpEl=document.getElementById('d-mode-help');
   if(helpEl){helpEl.style.display=help?'':'none';if(help!==prevHelpHtml){prevHelpHtml=help;helpEl.innerHTML=help;}}

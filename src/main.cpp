@@ -1028,7 +1028,7 @@ void handleIdle() {
     // even if all known files are marked complete. This ensures new DATALOG
     // folders written by the CPAP since the last upload are discovered during
     // the scan phase of the upload cycle.
-    if (sm->isInUploadWindow() && !sm->isDayCompleted()) {
+    if (!sm->isManualMode() && sm->isInUploadWindow() && !sm->isDayCompleted()) {
         LOG("[FSM] Upload window open — transitioning to LISTENING");
         transitionTo(UploadState::LISTENING);
     }
@@ -1335,7 +1335,10 @@ void handleUploading() {
         bool forceRecent = false;
 #endif
 
-        if (forceRecent) {
+        if (sm && sm->isManualMode()) {
+            filter = DataFilter::ALL_DATA;
+            LOG("[FSM] Manual mode force upload — uploading all data");
+        } else if (forceRecent) {
             filter = DataFilter::FRESH_ONLY;
             LOG("[FSM] Force upload (recent only) — outside scheduled window");
         } else {
@@ -1584,6 +1587,9 @@ void handleCooldown() {
             LOG("[FSM] Smart mode — returning to LISTENING (continuous loop)");
             transitionTo(UploadState::LISTENING);
         }
+    } else if (sm->isManualMode()) {
+        LOG("[FSM] Manual mode — cooldown complete, transitioning to IDLE");
+        transitionTo(UploadState::IDLE);
     } else {
         // Scheduled mode: return to LISTENING if still in window and day not done
         if (sm->isInUploadWindow() && !sm->isDayCompleted()) {
@@ -1610,6 +1616,10 @@ void handleComplete() {
         // Smart mode: release → cooldown → listening (continuous loop)
         // Next cycle will scan SD card and discover any new data naturally
         LOG("[FSM] Smart mode complete — continuing loop via RELEASING → COOLDOWN → LISTENING");
+        transitionTo(UploadState::RELEASING);
+    } else if (sm->isManualMode()) {
+        // Manual mode: release → cooldown → idle
+        LOG("[FSM] Manual mode complete — transitioning to RELEASING");
         transitionTo(UploadState::RELEASING);
     } else {
         // Scheduled mode: done for today

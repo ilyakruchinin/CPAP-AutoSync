@@ -199,6 +199,7 @@ public:
     bool getFlushLogsDuringUpload() const;
     int getSmartStartHour() const;
     bool isSmartMode() const;          // returns false when smartConfigInvalid
+    bool isManualMode() const;
     bool isSmartConfigInvalid() const;
     
     // Power management getters
