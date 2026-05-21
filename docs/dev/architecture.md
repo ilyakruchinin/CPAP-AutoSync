@@ -12,6 +12,7 @@
 1. Waits for upload eligibility based on configured mode (`UPLOAD_MODE`)
    - Smart mode: shortly after therapy ends (activity + inactivity detection)
    - Scheduled mode: during configured upload window
+   - Manual mode: never automatically uploads, remains idle until manual trigger
 2. **Pre-flight scan** checks for new/changed files (SD-only, no network)
 3. Takes control of SD card (only when CPAP is idle)
 4. **Phased dual-backend upload** (optimizes memory usage):

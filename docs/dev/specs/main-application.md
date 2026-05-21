@@ -84,6 +84,7 @@ const unsigned long CONFIG_EDIT_LOCK_TIMEOUT_MS = 30 * 60 * 1000;  // 30 min
 ### Upload Modes
 - **Smart Mode**: Continuous loop, uploads recent data anytime, old data only in upload window. Includes a dynamic edge-trigger that instantly clears `g_noWorkSuppressed` the moment the daily schedule window opens, ensuring it never sleeps through old-data uploads.
 - **Scheduled Mode**: Only uploads within configured time window, enters IDLE between windows
+- **Manual Mode**: Never uploads automatically. The device stays in the `IDLE` state permanently. An upload is only initiated when the user manually triggers a "Force Upload" from the web interface. Once the forced upload is complete, the device runs a cooldown period and then returns directly to `IDLE` (without entering the `LISTENING` loop or marking the day completed). Forced uploads in manual mode always target all available data (no recent-only restriction).
 
 ## Global Objects
 - `Config` - Configuration management

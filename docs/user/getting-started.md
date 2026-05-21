@@ -109,13 +109,13 @@ If your device randomly reboots (shows "REBOOTING" constantly) or drops WiFi, it
 
 > *For deeper power troubleshooting steps, see the [Advanced Configuration](../dev/manual-configuration.md) guide.*
 
-### ⚠️ SD Card Errors — Use Scheduled Mode
+### ⚠️ SD Card Errors — Use Scheduled or Manual Mode
 
-> **If your CPAP machine is showing "SD Card Error" or "SD Card Removed" messages, switch to `UPLOAD_MODE = scheduled` immediately.**
+> **If your CPAP machine is showing "SD Card Error" or "SD Card Removed" messages, switch to `UPLOAD_MODE = scheduled` or `manual` immediately.**
 
 The default `smart` upload mode detects SD bus activity to decide when it is safe to take the card. On some CPAP models, this activity detection may not work perfectly, causing the uploader to take the SD card at the wrong moment.
 
-**Fix:** Use the web dashboard (or setup wizard) to change your mode from **Smart** to **Scheduled**. In Scheduled mode, the uploader **only runs during the specific hours you set** (e.g. 9 AM–11 PM) and completely avoids checking the card while you sleep.
+**Fix:** Use the web dashboard (or setup wizard) to change your mode from **Smart** to **Scheduled** or **Manual**. In Scheduled mode, the uploader **only runs during the specific hours you set** (e.g. 9 AM–11 PM) and completely avoids checking the card while you sleep. In Manual mode, the system remains in `IDLE` permanently and only runs when you click the **Force Upload** button, ensuring the CPAP machine has uncontested access to the SD card at all other times.
 
 ### WiFi Connection Issues
 - **Device doesn't connect to WiFi:** Ensure your WiFi is 2.4GHz (ESP32 doesn't support 5GHz). Try moving the router closer.
