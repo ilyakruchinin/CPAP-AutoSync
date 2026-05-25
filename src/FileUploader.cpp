@@ -629,6 +629,7 @@ UploadResult FileUploader::runFullSession(SDCardManager* sdManager, int maxMinut
                 if (!sleephqUploader->begin()) {
                     LOG_ERROR("[FileUploader] Cloud init failed — skipping cloud phase");
                     cloudImportFailed = true;
+                    sessionHadFailure = true;
                 } else {
                     cloudImportCreated = true;
                     LOGF("[FileUploader] Cloud session ready — heap: fh=%u ma=%u",
@@ -636,7 +637,10 @@ UploadResult FileUploader::runFullSession(SDCardManager* sdManager, int maxMinut
                 }
             } else {
                 if (!cloudImportCreated && !cloudImportFailed) {
-                    if (!sleephqUploader->createImport()) cloudImportFailed = true;
+                    if (!sleephqUploader->createImport()) {
+                        cloudImportFailed = true;
+                        sessionHadFailure = true;
+                    }
                     else                                  cloudImportCreated = true;
                 }
             }
@@ -756,6 +760,7 @@ UploadResult FileUploader::runFullSession(SDCardManager* sdManager, int maxMinut
             g_smbSessionStatus.filesTotal       = 0;
             g_smbSessionStatus.currentFolder[0] = '\0';
             currentPhase = UploadBackend::NONE;
+            sessionHadFailure = true;
             goto smb_phase_done;
         }
 
@@ -1088,7 +1093,7 @@ std::vector<String> FileUploader::scanDatalogFolders(fs::FS &sd, UploadStateMana
         LOG_DEBUGF("[FileUploader] Found %d incomplete DATALOG folders", folders.size());
     }
 
-    if (sm) sm->setTotalFoldersCount(folders.size());
+    if (sm) sm->setTotalFoldersCount(eligibleFolderCount);
     
     return folders;
 }

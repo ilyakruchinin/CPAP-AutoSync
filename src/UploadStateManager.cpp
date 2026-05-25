@@ -131,7 +131,10 @@ void UploadStateManager::clearState() {
     journalLineCount = 0;
     forceCompaction = false;
     totalFoldersCount = 0;
+    probeUniverse = -1;
+    probeSynced = -1;
     probeSnapshotCompletedCount = -1;
+    hasProbed = false;
 
     memset(completedFolders, 0, sizeof(completedFolders));
     memset(pendingFolders, 0, sizeof(pendingFolders));
@@ -582,6 +585,10 @@ int UploadStateManager::getCompletedFoldersCount() const {
 }
 
 int UploadStateManager::getIncompleteFoldersCount() const {
+    if (hasProbed) {
+        int incomplete = probeUniverse - probeSynced;
+        return incomplete > 0 ? incomplete : 0;
+    }
     if (totalFoldersCount == 0) {
         return 0;  // Not yet scanned
     }
