@@ -92,7 +92,7 @@ FileUploader::WorkProbeResult FileUploader::hasWorkToUpload(fs::FS &sd) {
         return result;
     }
 
-    const bool canUploadOld = !scheduleManager || scheduleManager->canUploadOldData();
+    const bool canUploadOld = !scheduleManager || scheduleManager->canProcessOldData();
 
     // Calculate MAX_DAYS cutoff — same logic as scanDatalogFolders().
     // Supported MAX_DAYS range is 1-365 so we always expect a non-empty cutoff
@@ -431,7 +431,7 @@ UploadResult FileUploader::runFullSession(SDCardManager* sdManager, int maxMinut
         // Compute once: can we process old (non-recent) folders this session?
         // When false (smart mode outside upload window), skip old folders entirely
         // to avoid unnecessary SD card I/O scanning hundreds of DATALOG folders.
-        bool canUploadOld = !scheduleManager || scheduleManager->canUploadOldData();
+        bool canUploadOld = !scheduleManager || scheduleManager->canProcessOldData();
 
         // Calculate MAX_DAYS cutoff once for pre-flight
         String maxDaysCutoff = "";
@@ -618,7 +618,7 @@ UploadResult FileUploader::runFullSession(SDCardManager* sdManager, int maxMinut
         }
 
         bool cloudHasWork = !freshFolders.empty() ||
-                       (!oldFolders.empty() && scheduleManager && scheduleManager->canUploadOldData());
+                       (!oldFolders.empty() && scheduleManager && scheduleManager->canProcessOldData());
 
         if (!cloudHasWork) {
             LOG("[FileUploader] Cloud: nothing to upload — skipping auth + import");
@@ -660,7 +660,7 @@ UploadResult FileUploader::runFullSession(SDCardManager* sdManager, int maxMinut
                         if (!runCloudFolder(folder)) break;
                     }
                 }
-                if (!timerExpired && needOld && scheduleManager && scheduleManager->canUploadOldData()) {
+                if (!timerExpired && needOld && scheduleManager && scheduleManager->canProcessOldData()) {
                     LOG("[FileUploader] Cloud: Old DATALOG folders");
                     for (const String& folder : oldFolders) {
                         if (!runCloudFolder(folder)) break;
@@ -862,7 +862,7 @@ UploadResult FileUploader::runFullSession(SDCardManager* sdManager, int maxMinut
             }
 
             bool smbHasWork = !freshFolders.empty() ||
-                           (!oldFolders.empty() && scheduleManager && scheduleManager->canUploadOldData()) ||
+                           (!oldFolders.empty() && scheduleManager && scheduleManager->canProcessOldData()) ||
                            mandatoryChanged;
 
             if (!smbHasWork) {
@@ -886,7 +886,7 @@ UploadResult FileUploader::runFullSession(SDCardManager* sdManager, int maxMinut
 #endif
                     }
                 }
-                if (!timerExpired && !sessionHadFailure && needOld && scheduleManager && scheduleManager->canUploadOldData()) {
+                if (!timerExpired && !sessionHadFailure && needOld && scheduleManager && scheduleManager->canProcessOldData()) {
                     LOG("[FileUploader] SMB: Old DATALOG folders");
                     for (const String& folder : oldFolders) {
                         if (isTimerExpired()) { timerExpired = true; break; }

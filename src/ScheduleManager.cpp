@@ -225,6 +225,17 @@ bool ScheduleManager::canUploadOldData() {
     return isInUploadWindow();
 }
 
+bool ScheduleManager::canProcessOldData() {
+    // Manual mode keeps canUploadOldData() == false so the scheduler/window
+    // logic (e.g. main.cpp window-open detection, isUploadEligible) stays
+    // pure.  But a manual run only ever happens via an explicit Force Upload,
+    // which is documented as "upload all available data now" — so old
+    // (non-recent) folders MUST be processed.  Gate on isTimeSynced() because
+    // recent/MAX_DAYS folder-name math is meaningless without a valid clock.
+    if (isManualMode()) return isTimeSynced();
+    return canUploadOldData();
+}
+
 bool ScheduleManager::isUploadEligible(bool hasFreshData, bool hasOldData) {
     if (isManualMode()) return false;
     if (!isTimeSynced()) return false;
