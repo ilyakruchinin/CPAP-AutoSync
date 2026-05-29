@@ -43,7 +43,8 @@ public:
     bool isInUploadWindow();                                  // Current hour within [start, end]
     bool isSmartQuietPeriod();                                // Smart mode quiet period active?
     bool canUploadFreshData();                                // Smart: always (except quiet). Scheduled: in window.
-    bool canUploadOldData();                                  // Both modes: in window only.
+    bool canUploadOldData();                                  // Scheduled/Smart: in window only. Manual: always false.
+    bool canProcessOldData();                                 // canUploadOldData(), plus manual Force Upload (explicit "upload all").
     bool isUploadEligible(bool hasFreshData, bool hasOldData); // Combines mode + window + data
     
     // Day completion (scheduled mode)
