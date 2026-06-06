@@ -93,6 +93,7 @@ private:
     bool _hasWebdavEndpoint;
     
     // Power management settings
+    String DeepSleepMode;          // "OFF" or "TRUE"
     int cpuSpeedMhz;
     WifiTxPower wifiTxPower;
     WifiPowerSaving wifiPowerSaving;
@@ -203,6 +204,7 @@ public:
     bool isSmartConfigInvalid() const;
     
     // Power management getters
+    const String& getDeepSleepMode() const;
     int getCpuSpeedMhz() const;
     WifiTxPower getWifiTxPower() const;
     WifiPowerSaving getWifiPowerSaving() const;

@@ -60,6 +60,7 @@ Config::Config() :
     credentialsInFlash(false),  // Will be set during loadFromSD
     
     // Power management defaults (optimized for AirSense 11 compatibility)
+    DeepSleepMode("none"),
     cpuSpeedMhz(80),  // Default: 80MHz (minimum for WiFi, saves ~30-40mA)
     wifiTxPower(WifiTxPower::POWER_MID),  // Default: 5.0dBm (typical bedroom placement, reduces peak current)
     wifiPowerSaving(WifiPowerSaving::SAVE_MID),  // Default: MIN_MODEM (preserves mDNS)
@@ -288,6 +289,8 @@ void Config::setConfigValue(String key, String value) {
         stealthRestore = (value.equalsIgnoreCase("true") || value == "1");
     } else if (key == "SD_CMD0_ON_RELEASE" || key == "AS10") {
         // Deprecated keys — silently ignored (stealth mode replaces these)
+    } else if (key == "DEEPSLEEPMODE") {
+        DeepSleepMode = value;
     } else if (key == "CPU_SPEED_MHZ") {
         cpuSpeedMhz = value.toInt();
     } else if (key == "WIFI_TX_PWR") {
@@ -792,6 +795,7 @@ bool Config::hasSmbEndpoint() const { return _hasSmbEndpoint; }
 bool Config::hasWebdavEndpoint() const { return _hasWebdavEndpoint; }
 
 // Power management getters
+const String& Config::getDeepSleepMode() const { return DeepSleepMode; }
 int Config::getCpuSpeedMhz() const { return cpuSpeedMhz; }
 WifiTxPower Config::getWifiTxPower() const { return wifiTxPower; }
 WifiPowerSaving Config::getWifiPowerSaving() const { return wifiPowerSaving; }
@@ -884,6 +888,9 @@ void Config::validateAndNormalize() {
     
     if (cpuSpeedMhz < 80) { cpuSpeedMhz = 80; }
     else if (cpuSpeedMhz > 240) { cpuSpeedMhz = 240; }
+
+    if (DeepSleepMode != "OFF" && DeepSleepMode != "TRUE") { DeepSleepMode = "OFF"; }
+  
 }
 
 // Helper methods for enum conversion

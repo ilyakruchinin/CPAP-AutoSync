@@ -28,6 +28,7 @@
 #include "UploadFSM.h"
 #include "TlsArena.h"
 #include <ESPmDNS.h>
+#include <time.h>
 
 // True when esp_restart() was the reset cause (ESP_RST_SW).
 // Any programmatic restart means the CPAP machine was already idle and
@@ -287,7 +288,49 @@ static String extractPanicDetailsFromCoredump() {
     }
     return "";
 }
+// ============================================================================
+// Deep Sleep Chek Functions
+// ============================================================================
 
+/**
+ * Checks if deep sleep mode in config selected and NTP synchronization successful and not "manual mode" selected.
+ * Checks if the current time is outside the "download window". if the time is outside 
+ * the "donwload window" and it exceeds 5 minutes, the ESP32 go to deep sleep mode.
+ * ESP32 is loaded within 1 minute before next "donwload window"
+ */
+void deepsleepcheck() {
+    // Deep sleep check
+    ScheduleManager* sm = uploader->getScheduleManager();
+    if (config.getDeepSleepMode() == "TRUE" && sm->isTimeSynced() && !sm->isManualMode()) {
+        time_t now = time(nullptr);
+        tm timeinfo;
+        localtime_r(&now, &timeinfo); 
+        int MySleepTime = 0;
+        if ((config.getUploadEndHour() * 60) <= (timeinfo.tm_hour * 60 + timeinfo.tm_min)) {
+            if (config.getUploadMode() == "smart") {
+                MySleepTime = 1440 + (config.getSmartStartHour() * 60) - (timeinfo.tm_hour * 60 + timeinfo.tm_min);
+            } else if (config.getUploadMode() == "scheduled") {
+                MySleepTime = 1440 + (config.getUploadStartHour() * 60) - (timeinfo.tm_hour * 60 + timeinfo.tm_min);
+            }
+        } else if (config.getUploadMode() == "smart") {
+            if ((config.getSmartStartHour() * 60) > (timeinfo.tm_hour * 60 + timeinfo.tm_min)) {
+                MySleepTime = (config.getSmartStartHour() * 60) - (timeinfo.tm_hour * 60 + timeinfo.tm_min);1440 + (config.getSmartStartHour() * 60) - (timeinfo.tm_hour * 60 + timeinfo.tm_min);
+            }
+        } else if (config.getUploadMode() == "scheduled"){
+            if ((config.getUploadStartHour() * 60) > (timeinfo.tm_hour * 60 + timeinfo.tm_min)) {
+                MySleepTime = (config.getUploadStartHour() * 60) - (timeinfo.tm_hour * 60 + timeinfo.tm_min);1440 + (config.getSmartStartHour() * 60) - (timeinfo.tm_hour * 60 + timeinfo.tm_min);    
+            }
+        }   
+        if (MySleepTime > 5){
+            MySleepTime--;
+            LOGF("Deep sleep mode next min: %d", MySleepTime);
+            uint64_t MySleepTime_us = MySleepTime *60 * 1000000ULL;
+            esp_sleep_enable_timer_wakeup(MySleepTime_us); 
+            esp_deep_sleep_start();
+        }
+    }       
+    //Deep sleep check end
+}
 /**
  * Convert ESP32 reset reason to human-readable string
  * Useful for diagnosing power issues, crashes, and unexpected resets
@@ -914,6 +957,7 @@ void setup() {
         if (sm && sm->isTimeSynced()) {
             LOG("Time synchronized successfully");
             LOGF("System time: %s", sm->getCurrentLocalTime().c_str());
+            deepsleepcheck();
         } else {
             LOG_DEBUG("Time sync not yet available, will retry every 5 minutes");
             lastNtpSyncAttempt = millis();
@@ -1101,6 +1145,7 @@ void handleListening() {
             LOG("[FSM] Smart mode — quiet period started, transitioning to IDLE");
             g_noWorkSuppressed = false;
             transitionTo(UploadState::IDLE);
+            deepsleepcheck();
             return;
         }
         
@@ -1121,6 +1166,7 @@ void handleListening() {
         if (!sm->isInUploadWindow() || sm->isDayCompleted()) {
             LOG("[FSM] Scheduled mode — window closed or day completed while listening");
             transitionTo(UploadState::IDLE);
+            deepsleepcheck(); 
         } else if (trafficMonitor.isIdleFor(inactivityMs)) {
             LOGF("[FSM] Scheduled mode — %ds of bus silence confirmed", config.getInactivitySeconds());
             
@@ -1582,6 +1628,7 @@ void handleCooldown() {
         if (sm->isSmartQuietPeriod()) {
             LOG("[FSM] Smart mode — cooldown expired during quiet period, transitioning to IDLE");
             transitionTo(UploadState::IDLE);
+            deepsleepcheck();         
         } else {
             trafficMonitor.resetIdleTracking();
             LOG("[FSM] Smart mode — returning to LISTENING (continuous loop)");
@@ -1598,6 +1645,7 @@ void handleCooldown() {
         } else {
             LOG("[FSM] Scheduled mode — window closed or day completed");
             transitionTo(UploadState::IDLE);
+            deepsleepcheck();
         }
     }
 }

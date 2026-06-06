@@ -83,6 +83,7 @@ Power defaults are optimised for AirSense 11 compatibility (low peak current). M
 
 | Key | Default | Options | Description |
 |---|---|---|---|
+| `DEEPSLEEPMODE` | `OFF` | `OFF`, `TRUE` | ESP32 deep sleep mode. At the default OFF. `OFF` = deep sleep mode is disabled. `TRUE` = ESP32 go to deep sleep mode (all function like WiFi, WEB GUI / OTA disabled) before and auto configured time window (upload time window), successful NTP synchronization is required. Not working with "Manual Mode". |
 | `CPU_SPEED_MHZ` | `80` | `80`, `160`, `240` | ESP32 CPU clock speed. At the default 80 MHz, DFS is disabled (CPU locked) — no frequency transitions, lowest power. Set to `160` to re-enable DFS (80–160 MHz) for faster TLS handshakes on non-constrained hardware. |
 | `WIFI_TX_PWR` | `MID` | `LOWEST` (-1 dBm), `LOW` (2 dBm), `MID` (5 dBm), `HIGH` (8.5 dBm), `MAX` (10 dBm) | WiFi transmit power. `MID` (5 dBm) is the default — sufficient for typical bedroom placement (~3–5 m). Use `LOWEST` or `LOW` only if your router is very close. Increase to `HIGH` or `MAX` if your router is further away or through walls. |
 | `WIFI_PWR_SAVING` | `MID` | `NONE`, `MID`, `MAX` | WiFi power-saving mode. `MID` (MIN_MODEM) wakes every DTIM for broadcasts — preserves mDNS while saving ~90 mA idle. `MAX` saves slightly more but may miss mDNS queries. |
