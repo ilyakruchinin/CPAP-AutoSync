@@ -60,7 +60,7 @@ Config::Config() :
     credentialsInFlash(false),  // Will be set during loadFromSD
     
     // Power management defaults (optimized for AirSense 11 compatibility)
-    DeepSleepMode("none"),
+    DeepSleepMode("OFF"),
     cpuSpeedMhz(80),  // Default: 80MHz (minimum for WiFi, saves ~30-40mA)
     wifiTxPower(WifiTxPower::POWER_MID),  // Default: 5.0dBm (typical bedroom placement, reduces peak current)
     wifiPowerSaving(WifiPowerSaving::SAVE_MID),  // Default: MIN_MODEM (preserves mDNS)
