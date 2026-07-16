@@ -1,6 +1,6 @@
 # ESP32 CPAP AutoSync
 
-![Warning](docs/screenshots/warning.png)
+[![Announcement](docs/screenshots/announcement.png)](https://github.com/ilyakruchinin/SomnoTrace)
 
 Automatically upload CPAP therapy data from your SD card to a network share or SleepHQ — **within minutes of taking your mask off.**
 
@@ -239,6 +239,37 @@ This project is licensed under the **GNU General Public License v3.0 (GPL-3.0)**
 This project uses libsmb2 (LGPL-2.1), which is compatible with GPL-3.0.
 
 See [LICENSE](LICENSE) file for full terms.
+
+## Major Improvements Over the Original Project
+
+This project started as a fork of [CPAP Data Uploader](https://github.com/amanuense/CPAP_data_uploader) by Oscar Arias (amanuense). It has since grown into a fully distinct firmware with the following major additions:
+
+- **AP Setup Wizard & Captive Portal**
+  - First-time setup via phone — no computer or SD card reader needed.
+- **Memory, Stability & Power Optimisation**
+  - Major improvements allowing for stable operation of most AirSense 11 machines.
+- **Multi-SSID WiFi Support (up to 4 networks)**
+  - Auto-selects strongest network; roaming between networks; eliminates ghost connections and log storms.
+- **Stealth Mode (Fixes AS10 boot loop during therapy)**
+  - Reads config and accesses SD card without the CPAP detecting it.
+- **Platform Upgrade: ESP-IDF 5.5.2**
+  - Lower idle power via dynamic frequency scaling; ~30 KB more RAM; faster TLS; more reliable WiFi and networking stack.
+- **Performance: Optimized TLS Cipher Usage**
+  - Forces hardware-accelerated AES-128-GCM for faster Cloud uploads and lower CPU load.
+- **Smart Mode with Quiet Period**
+  - Prevents uploads during active therapy to avoid SD Card errors; auto-detects hardware capability and falls back to Scheduled mode on older devices.
+- **Custom NTP & DHCP Option 42 Support**
+  - Custom NTP server support with automatic router-based fallback; zero-overhead, non-blocking time sync.
+- **Multi-Device Hostname in Web UI**
+  - Custom hostname shown in browser tab and dashboard, helping users identify which CPAP machine they're viewing.
+- **Remote Syslog (UDP)**
+  - Stream all device logs to a remote server for fleet monitoring. Zero impact on stability.
+- **SMB Timestamp Preservation**
+  - Backup files on the NAS show original sleep-study dates, not upload timestamps.
+- **Manual Upload Mode**
+  - Disables all automatic uploads and SD card checks; uploads only when you press Force Upload. Full data scan every time.
+
+---
 
 ## Acknowledgements
 
