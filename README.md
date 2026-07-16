@@ -225,21 +225,6 @@ This ensures the CPAP machine resumes seamlessly without noticing the interrupti
 
 ---
 
-## License
-
-This project is licensed under the **GNU General Public License v3.0 (GPL-3.0)**.
-
-**What this means:**
-- ✅ You can use this software for free
-- ✅ You can modify the source code
-- ✅ You can distribute modified versions
-- ⚠️ **Any distributed versions (modified or not) must remain free and open source**
-- ⚠️ Modified versions must also be licensed under GPL-3.0
-
-This project uses libsmb2 (LGPL-2.1), which is compatible with GPL-3.0.
-
-See [LICENSE](LICENSE) file for full terms.
-
 ## Major Improvements Over the Original Project
 
 This project started as a fork of [CPAP Data Uploader](https://github.com/amanuense/CPAP_data_uploader) by Oscar Arias (amanuense). It has since grown into a fully distinct firmware with the following major additions:
@@ -270,6 +255,21 @@ This project started as a fork of [CPAP Data Uploader](https://github.com/amanue
   - Disables all automatic uploads and SD card checks; uploads only when you press Force Upload. Full data scan every time.
 
 ---
+
+## License
+
+This project is licensed under the **GNU General Public License v3.0 (GPL-3.0)**.
+
+**What this means:**
+- ✅ You can use this software for free
+- ✅ You can modify the source code
+- ✅ You can distribute modified versions
+- ⚠️ **Any distributed versions (modified or not) must remain free and open source**
+- ⚠️ Modified versions must also be licensed under GPL-3.0
+
+This project uses libsmb2 (LGPL-2.1), which is compatible with GPL-3.0.
+
+See [LICENSE](LICENSE) file for full terms.
 
 ## Acknowledgements
 
