@@ -1,6 +1,15 @@
 # ESP32 CPAP AutoSync
 
-[![Announcement](docs/screenshots/announcement.png)](https://github.com/ilyakruchinin/SomnoTrace)
+> [!IMPORTANT]
+> # ⛔ THIS PROJECT IS DEPRECATED
+>
+> **CPAP AutoSync is no longer actively maintained.** Please use **[SomnoTrace](https://github.com/ilyakruchinin/SomnoTrace)** instead — the actively developed successor to this project.
+>
+> **⚠️ The required hardware is discontinued:** The **FYSETC WiFi SD Pro** card that this firmware runs on has been **discontinued by the manufacturer** and is no longer available for purchase.
+
+[![Warning: project deprecated — use SomnoTrace](docs/screenshots/warning.png)](https://github.com/ilyakruchinin/SomnoTrace)
+
+[![Announcing SomnoTrace — the successor to CPAP-AutoSync](docs/screenshots/announcement.png)](https://github.com/ilyakruchinin/SomnoTrace)
 
 Automatically upload CPAP therapy data from your SD card to a network share or SleepHQ — **within minutes of taking your mask off.**
 
@@ -118,7 +127,10 @@ If your REF 39517 AirSense 11 has power issues, the following community-develope
 ## 🚀 Quick Start — 4 Steps
 
 ### 1. Get the hardware
-[SD WIFI PRO](https://www.fysetc.com/products/fysetc-upgrade-sd-wifi-pro-with-card-reader-module-run-wireless-by-esp32-chip-web-server-reader-uploader-3d-printer-parts) — an ESP32-powered SD card that physically inserts into your CPAP's SD card slot like a regular memory card.
+> [!WARNING]
+> **This hardware is discontinued.** The FYSETC WiFi SD Pro is no longer manufactured or sold. The instructions below only apply if you already own the card.
+
+[SD WIFI PRO](https://www.fysetc.com/products/fysetc-upgrade-sd-wifi-pro-with-card-reader-module-run-wireless-by-esp32-chip-web-server-reader-uploader-3d-printer-parts) — an ESP32-powered SD card that physically inserts into your CPAP's SD card slot like a regular memory card. **(Discontinued by the manufacturer)**
 
 ### 2. Flash the firmware
 👉 **[Download Latest Release](../../releases)** — flash the firmware using a simple web-based tool in Chrome, Edge, or Opera. No coding required.
@@ -196,7 +208,7 @@ See the [Full Setup Guide](docs/user/getting-started.md#️-sd-card-errors--use-
 
 | | |
 |---|---|
-| **Adapter** | [SD WIFI PRO](https://www.fysetc.com/products/fysetc-upgrade-sd-wifi-pro-with-card-reader-module-run-wireless-by-esp32-chip-web-server-reader-uploader-3d-printer-parts) (ESP32-PICO-D4, 4MB Flash, WiFi 2.4GHz) |
+| **Adapter** | [SD WIFI PRO](https://www.fysetc.com/products/fysetc-upgrade-sd-wifi-pro-with-card-reader-module-run-wireless-by-esp32-chip-web-server-reader-uploader-3d-printer-parts) (ESP32-PICO-D4, 4MB Flash, WiFi 2.4GHz) — **discontinued by the manufacturer** |
 | **CPAP machines** | ResMed Series 10 and 11 |
 | **WiFi** | 2.4GHz only (ESP32 limitation) |
 | **Upload targets** | SMB/CIFS share, SleepHQ cloud, or both |
