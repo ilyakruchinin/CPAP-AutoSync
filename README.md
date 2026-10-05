@@ -5,7 +5,7 @@
 >
 > **CPAP AutoSync is no longer actively maintained.** Please use **[SomnoTrace](https://github.com/ilyakruchinin/SomnoTrace)** instead — the actively developed successor to this project.
 >
-> **⚠️ The required hardware is discontinued:** The **FYSETC WiFi SD Pro** card that this firmware runs on has been **discontinued by the manufacturer** and is no longer available for purchase.
+> **⚠️ The required hardware is discontinued:** The **FYSETC WiFi SD Pro** card that this firmware runs on was **discontinued by the manufacturer** in April 2026 and is no longer available for purchase.
 
 [![Warning: project deprecated — use SomnoTrace](docs/screenshots/warning.png)](https://github.com/ilyakruchinin/SomnoTrace)
 
