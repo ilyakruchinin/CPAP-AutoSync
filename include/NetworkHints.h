@@ -49,6 +49,9 @@ public:
     // Returns false on argument error (null/empty ssid, null bssid).
     bool upsert(const char* ssid, const uint8_t* bssid, uint8_t channel, bool pmf_disable);
 
+    // Remove an exact (ssid, bssid) hint. Returns false if not found.
+    bool remove(const char* ssid, const uint8_t* bssid);
+
     // Drop entries with last_used_secs older than (nowSecs - maxAgeSecs).
     // No-op if nowSecs <= maxAgeSecs (clock not synced).
     int evictStale(uint32_t nowSecs, uint32_t maxAgeSecs);

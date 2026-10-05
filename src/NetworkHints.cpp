@@ -143,6 +143,17 @@ bool NetworkHints::upsert(const char* ssid, const uint8_t* bssid, uint8_t channe
     return true;
 }
 
+bool NetworkHints::remove(const char* ssid, const uint8_t* bssid) {
+    int idx = findIndex(ssid, bssid);
+    if (idx < 0) return false;
+    for (int i = idx; i < _count - 1; i++) {
+        _hints[i] = _hints[i + 1];
+    }
+    _count--;
+    memset(&_hints[_count], 0, sizeof(_hints[_count]));
+    return true;
+}
+
 int NetworkHints::evictStale(uint32_t nowSecs, uint32_t maxAgeSecs) {
     if (nowSecs <= maxAgeSecs) return 0;  // clock unsynced or unreasonable
     uint32_t cutoff = nowSecs - maxAgeSecs;

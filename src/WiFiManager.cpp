@@ -376,8 +376,9 @@ void WiFiManager::enterPmfRetry() {
 void WiFiManager::prepareSingleCandidate(uint8_t configSlot) {
     _candidates[0].configSlot = configSlot;
     memset(_candidates[0].bssid, 0, 6);
-    _candidates[0].channel = 0;
-    _candidates[0].rssi    = 0;
+    _candidates[0].channel  = 0;
+    _candidates[0].rssi     = 0;
+    _candidates[0].fromHint = false;
 
     // Single-SSID path: no scan to source a BSSID/channel from. Try to find
     // a hint for this SSID (any BSSID; pick the most recently used) so we can
@@ -393,7 +394,8 @@ void WiFiManager::prepareSingleCandidate(uint8_t configSlot) {
         }
         if (best) {
             memcpy(_candidates[0].bssid, best->bssid, 6);
-            _candidates[0].channel = best->channel;
+            _candidates[0].channel  = best->channel;
+            _candidates[0].fromHint = true;
             LOGF("WiFi: using cached hint for '%s' (ch=%u)", ssid.c_str(), best->channel);
         }
     }
@@ -435,8 +437,9 @@ void WiFiManager::processScanResults() {
             const uint8_t* bssid = WiFi.BSSID(i);
             if (bssid) memcpy(c.bssid, bssid, 6);
             else       memset(c.bssid, 0, 6);
-            c.channel = (uint8_t)WiFi.channel(i);
-            c.rssi    = (int8_t)WiFi.RSSI(i);
+            c.channel  = (uint8_t)WiFi.channel(i);
+            c.rssi     = (int8_t)WiFi.RSSI(i);
+            c.fromHint = false;
             _candidateCount++;
             break;  // one scan result matches at most one configured slot
         }
@@ -456,8 +459,9 @@ void WiFiManager::processScanResults() {
             Candidate& c = _candidates[_candidateCount];
             c.configSlot = (uint8_t)slot;
             memset(c.bssid, 0, 6);
-            c.channel = 0;
-            c.rssi    = -127;
+            c.channel  = 0;
+            c.rssi     = -127;
+            c.fromHint = false;
             const String& ssid = _pendingConfig->getWifiSSID(slot);
             const SavedNetworkHint* best = nullptr;
             for (int hi = 0; hi < networkHints.count(); hi++) {
@@ -468,7 +472,8 @@ void WiFiManager::processScanResults() {
             }
             if (best) {
                 memcpy(c.bssid, best->bssid, 6);
-                c.channel = best->channel;
+                c.channel  = best->channel;
+                c.fromHint = true;
             }
             _candidateCount++;
         }
@@ -576,6 +581,24 @@ bool WiFiManager::startCurrentCandidate() {
 }
 
 void WiFiManager::onCurrentCandidateFailed() {
+    Candidate& c = _candidates[_candidateIndex];
+    if (c.fromHint) {
+        // The cached BSSID/channel pin produced a dead end (router replaced,
+        // channel reassigned, mesh node retired). Drop the pin and retry
+        // hintless — a plain WiFi.begin() scans for the SSID like pre-hints
+        // firmware did. Evict the stale record so later reconnect cycles
+        // don't re-pin a dead AP.
+        LOG_WARNF("WiFi: cached hint for '%s' unreachable - dropping BSSID/channel pin",
+                  _pendingSsid.c_str());
+        if (networkHints.remove(_pendingSsid.c_str(), c.bssid)) {
+            networkHints.save();
+        }
+        memset(c.bssid, 0, 6);
+        c.channel  = 0;
+        c.fromHint = false;
+        startCurrentCandidate();
+        return;
+    }
     if (_candidateRetries < CANDIDATE_MAX_RETRIES) {
         _candidateRetries++;
         LOGF("WiFi: retry %u/%u on current candidate", _candidateRetries, CANDIDATE_MAX_RETRIES);
@@ -634,7 +657,7 @@ bool WiFiManager::beginConnect(const Config& cfg) {
     _candidateRetries = 0;
 
     if (n == 1) {
-        // Single SSID: skip scan, no BSSID hint.
+        // Single SSID: skip scan; a cached hint pins BSSID/channel if we have one.
         prepareSingleCandidate(0);
         return startCurrentCandidate();
     }
@@ -853,8 +876,9 @@ void WiFiManager::processRoamScanResults() {
             const uint8_t* bssid = WiFi.BSSID(i);
             if (bssid) memcpy(c.bssid, bssid, 6);
             else       memset(c.bssid, 0, 6);
-            c.channel = (uint8_t)WiFi.channel(i);
-            c.rssi    = (int8_t)WiFi.RSSI(i);
+            c.channel  = (uint8_t)WiFi.channel(i);
+            c.rssi     = (int8_t)WiFi.RSSI(i);
+            c.fromHint = false;
             _candidateCount++;
             break;
         }

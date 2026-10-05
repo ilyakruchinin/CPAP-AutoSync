@@ -39,6 +39,7 @@ private:
         uint8_t bssid[6];     // BSSID from scan result (used as connect hint)
         uint8_t channel;      // 1..14 (used as connect hint)
         int8_t  rssi;         // dBm
+        bool    fromHint;     // BSSID/channel came from the NVS cache, not a live scan
     };
 
     static constexpr int     MAX_CANDIDATES        = 12;
